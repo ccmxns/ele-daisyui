@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron DaisyUI Framework</title>
+    <link href="./dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen bg-base-200">
+    <!-- 自定义标题栏 Windows 风格 -->
+    <div class="custom-titlebar bg-base-100 border-b border-base-300 h-8 flex items-center justify-between px-4 select-none" style="-webkit-app-region: drag;">
+        <!-- 标题 -->
+        <div class="flex items-center gap-3">
+            <span class="text-sm font-medium text-base-content/80">Electron DaisyUI Framework</span>
+        </div>
+        
+        <!-- Windows 风格控制按钮 -->
+        <div class="flex items-center" style="-webkit-app-region: no-drag;">
+            <!-- 最小化按钮 -->
+            <button class="w-12 h-8 flex items-center justify-center text-base-content/70 hover:bg-base-200 transition-colors duration-200" onclick="electronAPI.windowMinimize()" title="最小化">
+                <svg width="10" height="1" viewBox="0 0 10 1" fill="currentColor">
+                    <rect width="10" height="1"/>
+                </svg>
+            </button>
+            
+            <!-- 最大化/还原按钮 -->
+            <button class="w-12 h-8 flex items-center justify-center text-base-content/70 hover:bg-base-200 transition-colors duration-200" onclick="electronAPI.windowMaximize()" title="最大化">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="0.5" y="0.5" width="9" height="9"/>
+                </svg>
+            </button>
+            
+            <!-- 关闭按钮 -->
+            <button class="w-12 h-8 flex items-center justify-center text-base-content/70 hover:bg-red-500 hover:text-white transition-colors duration-200" onclick="electronAPI.windowClose()" title="关闭">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2">
+                    <path d="m1.5 1.5 7 7m-7 0 7-7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 主要内容区域 -->
+    <main class="min-h-screen pt-8">
+        <!-- 顶部导航栏 -->
+        <header class="bg-base-100 shadow-sm border-b border-base-300">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center gap-4">
+                    <div class="breadcrumbs text-sm">
+                        <ul>
+                            <li><a>Framework</a></li>
+                            <li id="current-page">Welcome</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- 主题切换 -->
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-100 rounded-box w-52">
+                            <div class="grid grid-cols-1 gap-3 p-3">
+                                <div class="outline-base-content overflow-hidden rounded-lg outline outline-2 outline-offset-2">
+                                    <div class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
+                                        <div class="grid grid-cols-5 grid-rows-3">
+                                            <div class="bg-base-200 col-start-1 row-span-2 row-start-1"></div>
+                                            <div class="bg-base-300 col-start-1 row-start-3"></div>
+                                            <div class="bg-base-100 col-span-4 col-start-2 row-span-3 row-start-1 flex flex-col gap-1 p-2">
+                                                <div class="font-bold">Light</div>
+                                                <div class="text-xs">浅色主题</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <select id="theme-select" class="select select-bordered select-sm w-full">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="cupcake">Cupcake</option>
+                                <option value="bumblebee">Bumblebee</option>
+                                <option value="emerald">Emerald</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="synthwave">Synthwave</option>
+                                <option value="retro">Retro</option>
+                                <option value="cyberpunk">Cyberpunk</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 设置菜单 -->
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li><a onclick="showSettings()"><i class="fas fa-cog"></i> 框架设置</a></li>
+                            <li><a><i class="fas fa-info-circle"></i> 关于框架</a></li>
+                            <li><a><i class="fas fa-book"></i> 开发文档</a></li>
+                            <li><a><i class="fas fa-code"></i> 示例代码</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 页面内容容器 -->
+        <div id="page-content" class="p-6">
+            <!-- 欢迎页面 -->
+            <div id="welcome-page" class="page-content">
+                <div class="hero min-h-96">
+                    <div class="hero-content text-center">
+                        <div class="max-w-md">
+                            <h1 class="text-5xl font-bold text-primary">
+                                <i class="fas fa-rocket"></i>
+                            </h1>
+                            <h1 class="text-4xl font-bold mt-4">Electron DaisyUI Framework</h1>
+                            <p class="py-6 text-base-content/70">
+                                基于 Electron + DaisyUI + Tailwind CSS 的现代桌面应用开发框架。
+                                快速构建美观、响应式的桌面应用程序。
+                            </p>
+                            <div class="flex justify-center gap-4">
+                                <button class="btn btn-primary" id="get-started">
+                                    <i class="fas fa-play"></i>
+                                    开始开发
+                                </button>
+                                <button class="btn btn-outline" id="view-docs">
+                                    <i class="fas fa-book"></i>
+                                    查看文档
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 功能特性 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body text-center">
+                            <div class="text-primary text-4xl mb-4">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <h2 class="card-title justify-center">跨平台桌面应用</h2>
+                            <p class="text-base-content/70">
+                                基于 Electron 构建，支持 Windows、macOS 和 Linux 三大平台
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body text-center">
+                            <div class="text-secondary text-4xl mb-4">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <h2 class="card-title justify-center">现代化界面设计</h2>
+                            <p class="text-base-content/70">
+                                集成 DaisyUI 和 Tailwind CSS，提供丰富的主题和组件
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body text-center">
+                            <div class="text-accent text-4xl mb-4">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h2 class="card-title justify-center">快速开发</h2>
+                            <p class="text-base-content/70">
+                                提供完整的模板系统和开发工具，让你专注于业务逻辑
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速入门 -->
+                <div class="card bg-base-100 shadow-xl mt-12">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl mb-6">
+                            <i class="fas fa-rocket text-primary"></i>
+                            快速入门
+                        </h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-bold mb-3">1. 开发环境设置</h3>
+                                <div class="mockup-code mb-4">
+                                    <pre data-prefix="$"><code>npm install</code></pre>
+                                    <pre data-prefix="$"><code>npm run dev</code></pre>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-3">2. 创建新页面</h3>
+                                <div class="mockup-code mb-4">
+                                    <pre data-prefix="1"><code>复制页面模板</code></pre>
+                                    <pre data-prefix="2"><code>添加到路由配置</code></pre>
+                                    <pre data-prefix="3"><code>自定义页面内容</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <h3 class="font-bold mb-3">3. 项目结构</h3>
+                            <div class="text-sm text-base-content/70 space-y-1">
+                                <div><code class="text-primary">src/renderer/pages/</code> - 页面文件</div>
+                                <div><code class="text-primary">src/renderer/components/</code> - 组件文件</div>
+                                <div><code class="text-primary">templates/</code> - 页面和组件模板</div>
+                                <div><code class="text-primary">main.js</code> - Electron 主进程</div>
+                                <div><code class="text-primary">tailwind.config.js</code> - 样式配置</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="src/renderer/pages/Settings.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
